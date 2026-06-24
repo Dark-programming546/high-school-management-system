@@ -1,19 +1,20 @@
 import express from "express";
-
-import { loginAdmin } from "../controllers/admin.controller.js";
-import authAdmin from "../middleware/authAdmin.js";
+import { loginAdmin, createStaffAccount, getStaffAccounts, deleteStaffAccount, resetStaffPassword } from "../controllers/admin.controller.js";
+import authRole from "../middleware/authRole.js";
 
 const router = express.Router();
+const adminOnly = authRole("ADMIN");
 
-// Public route
+// Public
 router.post("/login", loginAdmin);
 
-// Protected route
-router.get("/profile", authAdmin, (req, res) => {
-  res.json({
-    success: true,
-    admin: req.admin,
-  });
-});
+// Profile
+router.get("/profile", adminOnly, (req, res) => res.json({ success: true, admin: req.admin }));
+
+// Staff account management (ADMIN only)
+router.post("/staff",                    adminOnly, createStaffAccount);
+router.get("/staff",                     adminOnly, getStaffAccounts);
+router.delete("/staff/:id",              adminOnly, deleteStaffAccount);
+router.patch("/staff/:id/reset-password", adminOnly, resetStaffPassword);
 
 export default router;
