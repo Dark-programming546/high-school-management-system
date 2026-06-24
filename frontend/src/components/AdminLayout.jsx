@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { label: 'Subjects',          path: '/admin/subjects',             icon: '📚' },
   { label: 'Teachers',          path: '/admin/teachers',             icon: '👨‍🏫' },
   { label: 'Students',          path: '/admin/students',             icon: '👥' },
+  { label: 'Staff Accounts',    path: '/admin/staff',                icon: '🔑' },
   { label: 'Assignments',       path: '/admin/teaching-assignments', icon: '📋' },
   { label: 'Assessment Scheme', path: '/admin/assessment-schemes',   icon: '⚖️'  },
   { label: 'Marks',             path: '/admin/marks',                icon: '📝' },

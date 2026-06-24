@@ -21,6 +21,7 @@ import AssessmentSchemesPage   from '../pages/admin/AssessmentSchemes.jsx';
 import MarksPage               from '../pages/admin/Marks.jsx';
 import ResultsPage             from '../pages/admin/Results.jsx';
 import RankingPage             from '../pages/admin/Ranking.jsx';
+import StaffPage               from '../pages/admin/Staff.jsx';
 
 import RegistrarDashboard      from '../pages/registrar/Dashboard.jsx';
 import RegistrarStudents       from '../pages/registrar/Students.jsx';
@@ -66,6 +67,7 @@ export default function AppRoutes() {
           <Route path="/admin/marks"                element={<Admin><MarksPage /></Admin>}                     />
           <Route path="/admin/results"              element={<Admin><ResultsPage /></Admin>}                   />
           <Route path="/admin/ranking"              element={<Admin><RankingPage /></Admin>}                   />
+          <Route path="/admin/staff"                element={<Admin><StaffPage /></Admin>}                     />
 
           {/* Registrar */}
           <Route path="/registrar/dashboard" element={<Registrar><RegistrarDashboard /></Registrar>} />
