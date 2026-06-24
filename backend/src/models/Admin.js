@@ -16,7 +16,18 @@ const adminSchema = new mongoose.Schema(
 
     role: {
       type: String,
+      enum: ["ADMIN", "REGISTRAR", "DIRECTOR", "VICE_DIRECTOR"],
       default: "ADMIN",
+    },
+
+    firstName: {
+      type: String,
+      trim: true,
+    },
+
+    lastName: {
+      type: String,
+      trim: true,
     },
 
     lastLogin: Date,
