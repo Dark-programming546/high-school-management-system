@@ -1,6 +1,5 @@
 import express from "express";
-
-import authAdmin from "../middleware/authAdmin.js";
+import authRole from "../middleware/authRole.js";
 import {
   createTeacher,
   getTeachers,
@@ -11,12 +10,13 @@ import {
 
 const router = express.Router();
 
-router.use(authAdmin);
+const canRead  = authRole("ADMIN", "DIRECTOR", "VICE_DIRECTOR");
+const adminOnly = authRole("ADMIN");
 
-router.post("/", createTeacher);
-router.get("/", getTeachers);
-router.get("/:id", getTeacherById);
-router.patch("/:id", updateTeacher);
-router.delete("/:id", deleteTeacher);
+router.post("/",     adminOnly, createTeacher);
+router.get("/",      canRead,   getTeachers);
+router.get("/:id",   canRead,   getTeacherById);
+router.patch("/:id", adminOnly, updateTeacher);
+router.delete("/:id",adminOnly, deleteTeacher);
 
 export default router;

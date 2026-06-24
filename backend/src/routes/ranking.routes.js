@@ -1,5 +1,5 @@
 import express from "express";
-import authAdmin from "../middleware/authAdmin.js";
+import authRole from "../middleware/authRole.js";
 import authUser from "../middleware/authUser.js";
 import {
   schoolRanking,
@@ -11,11 +11,11 @@ import {
 const router = express.Router();
 
 // Admin only: trigger ranking calculations
-router.post("/school", authAdmin, schoolRanking);
-router.post("/class/:classId", authAdmin, classRanking);
+router.post("/school",          authRole("ADMIN"), schoolRanking);
+router.post("/class/:classId",  authRole("ADMIN"), classRanking);
 
-// Admin or Teacher: read top students and class ranking
-router.get("/top3", authUser, topStudents);
-router.get("/class/:classId", authUser, getClassRanking);
+// All staff and teachers: read rankings
+router.get("/top3",             authUser, topStudents);
+router.get("/class/:classId",   authUser, getClassRanking);
 
 export default router;

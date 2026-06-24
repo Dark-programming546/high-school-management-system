@@ -1,5 +1,5 @@
 import express from "express";
-import authAdmin from "../middleware/authAdmin.js";
+import authRole from "../middleware/authRole.js";
 import authUser from "../middleware/authUser.js";
 import {
   calculateResult,
@@ -9,9 +9,9 @@ import {
 const router = express.Router();
 
 // Admin only: calculate results
-router.post("/calculate", authAdmin, calculateResult);
+router.post("/calculate", authRole("ADMIN"), calculateResult);
 
-// Admin or Teacher: view results
+// Admin, Director, Vice Director, Teacher: view results
 router.get("/", authUser, getResults);
 
 export default router;

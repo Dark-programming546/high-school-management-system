@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import { rateLimit } from "./middleware/rateLimit.js";
 import adminRoutes from "./routes/admin.routes.js";
+import registrarRoutes from "./routes/registrar.routes.js";
+import directorRoutes from "./routes/director.routes.js";
+import viceDirectorRoutes from "./routes/viceDirector.routes.js";
 import academicYearRoutes from "./routes/academicYear.routes.js";
 import classRoutes from "./routes/class.routes.js";
 import subjectRoutes from "./routes/subject.routes.js";
@@ -32,6 +35,9 @@ app.use(express.json());
 
 // Rate limit all login endpoints
 app.use("/api/admin/login", rateLimit);
+app.use("/api/registrar/login", rateLimit);
+app.use("/api/director/login", rateLimit);
+app.use("/api/vice-director/login", rateLimit);
 app.use("/api/teacher-auth/login", rateLimit);
 app.use("/api/student-auth/login", rateLimit);
 
@@ -44,6 +50,15 @@ app.get("/", (req, res) => {
 
 // Admin routes
 app.use("/api/admin", adminRoutes);
+
+// Registrar routes
+app.use("/api/registrar", registrarRoutes);
+
+// Director routes
+app.use("/api/director", directorRoutes);
+
+// Vice Director routes
+app.use("/api/vice-director", viceDirectorRoutes);
 
 // Academic year routes
 app.use("/api/academic-years", academicYearRoutes);
