@@ -1,7 +1,14 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
-const DASHBOARDS = { admin: '/admin/dashboard', teacher: '/teacher/dashboard', student: '/student/dashboard' };
+const DASHBOARDS = {
+  admin:        '/admin/dashboard',
+  registrar:    '/registrar/dashboard',
+  director:     '/director/dashboard',
+  vicedirector: '/director/dashboard',
+  teacher:      '/teacher/dashboard',
+  student:      '/student/dashboard',
+};
 
 export default function ProtectedRoute({ children, requiredRole }) {
   const { user, loading } = useAuth();

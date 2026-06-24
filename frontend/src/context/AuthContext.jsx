@@ -31,13 +31,16 @@ export function AuthProvider({ children }) {
   const login = async (username, password, role = 'admin') => {
     try {
       const endpoints = {
-        admin:   '/admin/login',
-        teacher: '/teacher-auth/login',
-        student: '/student-auth/login',
+        admin:         '/admin/login',
+        registrar:     '/registrar/login',
+        director:      '/director/login',
+        vicedirector:  '/vice-director/login',
+        teacher:       '/teacher-auth/login',
+        student:       '/student-auth/login',
       };
       const response = await apiClient.post(endpoints[role], { username, password });
       const { token } = response.data;
-      const userInfo = response.data.admin || response.data.teacher || response.data.student || {};
+      const userInfo = response.data.admin || response.data.staff || response.data.teacher || response.data.student || {};
       const resolvedUsername = userInfo.username || username;
       const mustChangePassword = userInfo.mustChangePassword || false;
 
