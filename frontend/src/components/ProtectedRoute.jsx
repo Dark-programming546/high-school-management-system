@@ -10,7 +10,7 @@ const DASHBOARDS = {
   student:      '/student/dashboard',
 };
 
-export default function ProtectedRoute({ children, requiredRole }) {
+export default function ProtectedRoute({ children, requiredRole, requiredRoles }) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -23,8 +23,15 @@ export default function ProtectedRoute({ children, requiredRole }) {
 
   if (!user) return <Navigate to="/login" replace />;
 
-  if (requiredRole && user.role?.toLowerCase() !== requiredRole.toLowerCase()) {
-    return <Navigate to={DASHBOARDS[user.role] || '/'} replace />;
+  const userRole = user.role?.toLowerCase();
+  const allowed = requiredRoles
+    ? requiredRoles.map(r => r.toLowerCase()).includes(userRole)
+    : requiredRole
+    ? userRole === requiredRole.toLowerCase()
+    : true;
+
+  if (!allowed) {
+    return <Navigate to={DASHBOARDS[userRole] || '/'} replace />;
   }
 
   return children;

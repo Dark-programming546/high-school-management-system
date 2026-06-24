@@ -6,6 +6,9 @@ import LandingPage             from '../pages/LandingPage.jsx';
 import AdminLogin              from '../pages/AdminLogin.jsx';
 import TeacherLogin            from '../pages/TeacherLogin.jsx';
 import StudentLogin            from '../pages/StudentLogin.jsx';
+import RegistrarLogin          from '../pages/RegistrarLogin.jsx';
+import DirectorLogin           from '../pages/DirectorLogin.jsx';
+import ViceDirectorLogin       from '../pages/ViceDirectorLogin.jsx';
 
 import AdminDashboard          from '../pages/admin/Dashboard.jsx';
 import AcademicYearsPage       from '../pages/admin/AcademicYears.jsx';
@@ -19,12 +22,23 @@ import MarksPage               from '../pages/admin/Marks.jsx';
 import ResultsPage             from '../pages/admin/Results.jsx';
 import RankingPage             from '../pages/admin/Ranking.jsx';
 
+import RegistrarDashboard      from '../pages/registrar/Dashboard.jsx';
+import RegistrarStudents       from '../pages/registrar/Students.jsx';
+
+import DirectorDashboard       from '../pages/director/Dashboard.jsx';
+import DirectorStudents        from '../pages/director/Students.jsx';
+import DirectorTeachers        from '../pages/director/Teachers.jsx';
+import DirectorResults         from '../pages/director/Results.jsx';
+import DirectorRanking         from '../pages/director/Ranking.jsx';
+
 import TeacherDashboard from '../pages/teacher/Dashboard.jsx';
 import StudentDashboard from '../pages/student/Dashboard.jsx';
 
-const Admin   = ({ children }) => <ProtectedRoute requiredRole="admin">{children}</ProtectedRoute>;
-const Teacher = ({ children }) => <ProtectedRoute requiredRole="teacher">{children}</ProtectedRoute>;
-const Student = ({ children }) => <ProtectedRoute requiredRole="student">{children}</ProtectedRoute>;
+const Admin        = ({ children }) => <ProtectedRoute requiredRole="admin">{children}</ProtectedRoute>;
+const Registrar    = ({ children }) => <ProtectedRoute requiredRole="registrar">{children}</ProtectedRoute>;
+const Director     = ({ children }) => <ProtectedRoute requiredRoles={['director','vicedirector']}>{children}</ProtectedRoute>;
+const Teacher      = ({ children }) => <ProtectedRoute requiredRole="teacher">{children}</ProtectedRoute>;
+const Student      = ({ children }) => <ProtectedRoute requiredRole="student">{children}</ProtectedRoute>;
 
 export default function AppRoutes() {
   return (
@@ -32,10 +46,13 @@ export default function AppRoutes() {
       <AuthProvider>
         <Routes>
           {/* Public */}
-          <Route path="/"               element={<LandingPage />}   />
-          <Route path="/login"          element={<AdminLogin />}    />
-          <Route path="/teacher-login"  element={<TeacherLogin />}  />
-          <Route path="/student-login"  element={<StudentLogin />}  />
+          <Route path="/"                   element={<LandingPage />}        />
+          <Route path="/login"              element={<AdminLogin />}         />
+          <Route path="/registrar-login"    element={<RegistrarLogin />}     />
+          <Route path="/director-login"     element={<DirectorLogin />}      />
+          <Route path="/vice-director-login" element={<ViceDirectorLogin />} />
+          <Route path="/teacher-login"      element={<TeacherLogin />}       />
+          <Route path="/student-login"      element={<StudentLogin />}       />
 
           {/* Admin */}
           <Route path="/admin/dashboard"            element={<Admin><AdminDashboard /></Admin>}                />
@@ -49,6 +66,17 @@ export default function AppRoutes() {
           <Route path="/admin/marks"                element={<Admin><MarksPage /></Admin>}                     />
           <Route path="/admin/results"              element={<Admin><ResultsPage /></Admin>}                   />
           <Route path="/admin/ranking"              element={<Admin><RankingPage /></Admin>}                   />
+
+          {/* Registrar */}
+          <Route path="/registrar/dashboard" element={<Registrar><RegistrarDashboard /></Registrar>} />
+          <Route path="/registrar/students"  element={<Registrar><RegistrarStudents /></Registrar>}  />
+
+          {/* Director & Vice Director (shared routes) */}
+          <Route path="/director/dashboard" element={<Director><DirectorDashboard /></Director>} />
+          <Route path="/director/students"  element={<Director><DirectorStudents /></Director>}  />
+          <Route path="/director/teachers"  element={<Director><DirectorTeachers /></Director>}  />
+          <Route path="/director/results"   element={<Director><DirectorResults /></Director>}   />
+          <Route path="/director/ranking"   element={<Director><DirectorRanking /></Director>}   />
 
           {/* Teacher */}
           <Route path="/teacher/dashboard" element={<Teacher><TeacherDashboard /></Teacher>} />
