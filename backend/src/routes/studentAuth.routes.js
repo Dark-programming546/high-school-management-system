@@ -1,5 +1,5 @@
 import express from "express";
-import authAdmin from "../middleware/authAdmin.js";
+import authRole from "../middleware/authRole.js";
 import authUser from "../middleware/authUser.js";
 import {
   createStudentAccount,
@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-// Admin creates a student login account
-router.patch("/students/:id/account", authAdmin, createStudentAccount);
+// Admin or Registrar creates a student login account (password auto-generated)
+router.patch("/students/:id/account", authRole("ADMIN", "REGISTRAR"), createStudentAccount);
 
 // Student logs in
 router.post("/login", loginStudent);

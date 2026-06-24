@@ -1,17 +1,15 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Student from "../models/Student.js";
+import { generateUniquePassword } from "../utils/passwordGenerator.js";
 
-// PATCH /api/student-auth/students/:id/account  — admin only
+// PATCH /api/student-auth/students/:id/account  — admin or registrar
 export const createStudentAccount = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username } = req.body;
 
-    if (!username || !password)
-      return res.status(400).json({ success: false, message: "Username and password are required" });
-
-    if (password.length < 6)
-      return res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
+    if (!username || typeof username !== "string" || !username.trim())
+      return res.status(400).json({ success: false, message: "Username is required" });
 
     const student = await Student.findById(req.params.id);
     if (!student)
@@ -24,8 +22,10 @@ export const createStudentAccount = async (req, res) => {
     if (taken)
       return res.status(409).json({ success: false, message: "Username already taken" });
 
-    student.username = username.toLowerCase();
-    student.password = await bcrypt.hash(password, 10);
+    const plainPassword = await generateUniquePassword(username);
+
+    student.username = username.toLowerCase().trim();
+    student.password = await bcrypt.hash(plainPassword, 10);
     student.mustChangePassword = true;
     await student.save();
 
@@ -35,7 +35,8 @@ export const createStudentAccount = async (req, res) => {
       student: {
         id: student._id,
         username: student.username,
-        mustChangePassword: student.mustChangePassword,
+        temporaryPassword: plainPassword,
+        mustChangePassword: true,
       },
     });
   } catch (error) {

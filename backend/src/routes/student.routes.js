@@ -1,6 +1,5 @@
 import express from "express";
-
-import authAdmin from "../middleware/authAdmin.js";
+import authRole from "../middleware/authRole.js";
 import {
   createStudent,
   getStudents,
@@ -9,10 +8,11 @@ import {
 
 const router = express.Router();
 
-router.use(authAdmin);
+// REGISTRAR and ADMIN can register and view students
+router.post("/", authRole("ADMIN", "REGISTRAR"), createStudent);
+router.get("/", authRole("ADMIN", "REGISTRAR", "DIRECTOR", "VICE_DIRECTOR"), getStudents);
 
-router.post("/", createStudent);
-router.get("/", getStudents);
-router.patch("/:id/status", updateStudentStatus);
+// Only ADMIN can approve/reject
+router.patch("/:id/status", authRole("ADMIN"), updateStudentStatus);
 
 export default router;
