@@ -89,3 +89,10 @@ export const promotionService = {
 export const dashboardService = {
   getStats: () => get('/dashboard/stats'),
 };
+
+export const staffService = {
+  getAll:        ()       => get('/admin/staff'),
+  create:        (data)   => post('/admin/staff', data),
+  delete:        (id)     => del(`/admin/staff/${id}`),
+  resetPassword: (id, d)  => patch(`/admin/staff/${id}/reset-password`, d),
+};
