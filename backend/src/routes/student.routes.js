@@ -3,16 +3,17 @@ import authRole from "../middleware/authRole.js";
 import {
   createStudent,
   getStudents,
+  getStudentById,
+  updateStudent,
   updateStudentStatus,
 } from "../controllers/student.controller.js";
 
 const router = express.Router();
 
-// REGISTRAR and ADMIN can register and view students
 router.post("/", authRole("ADMIN", "REGISTRAR"), createStudent);
 router.get("/", authRole("ADMIN", "REGISTRAR", "DIRECTOR", "VICE_DIRECTOR"), getStudents);
-
-// Only ADMIN can approve/reject
-router.patch("/:id/status", authRole("ADMIN"), updateStudentStatus);
+router.get("/:id", authRole("ADMIN", "REGISTRAR", "DIRECTOR", "VICE_DIRECTOR"), getStudentById);
+router.patch("/:id", authRole("ADMIN", "REGISTRAR"), updateStudent);
+router.patch("/:id/status", authRole("ADMIN", "REGISTRAR"), updateStudentStatus);
 
 export default router;
