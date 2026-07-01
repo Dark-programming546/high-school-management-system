@@ -38,10 +38,23 @@ const studentSchema = new mongoose.Schema(
       default: null,
     },
 
+    section: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      default: null,
+    },
+
     stream: {
       type: String,
       enum: ["NONE", "NATURAL", "SOCIAL"],
       default: "NONE",
+    },
+
+    selectedStream: {
+      type: String,
+      enum: ["NATURAL", "SOCIAL"],
+      default: null,
     },
 
     status: {

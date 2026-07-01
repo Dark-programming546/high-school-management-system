@@ -15,19 +15,42 @@ export const evaluatePass = (failedCount, average) => {
 
 const validateStream = (stream) => ["NATURAL", "SOCIAL"].includes(stream);
 
-const assignNextClass = async (student, nextGrade, stream) => {
+/**
+ * Extract section letter from class name, e.g. "9C" → "C", "11A" → "A"
+ */
+const extractSection = (className) => {
+  if (!className) return null;
+  const match = className.match(/([A-Za-z]+)$/);
+  return match ? match[1].toUpperCase() : null;
+};
+
+/**
+ * Assign next class:
+ * - 9→10 and 11→12: preserve same section letter
+ * - 10→11: stream-based, assign to first available section in that stream
+ */
+const assignNextClass = async (student, nextGrade, stream, preserveSection) => {
   const query = {
     grade: nextGrade,
     academicYearId: student.academicYearId,
   };
 
-  if (stream) {
-    query.stream = stream;
+  if (stream) query.stream = stream;
+
+  if (preserveSection && student.section) {
+    // Try to find the class with the same section letter
+    const sectionClass = await Class.findOne({
+      ...query,
+      name: new RegExp(`${nextGrade}${student.section}$`, "i"),
+    });
+    if (sectionClass) return { classId: sectionClass._id, section: student.section };
   }
 
+  // Fallback: first available class sorted by name
   const nextClass = await Class.findOne(query).sort({ name: 1 });
+  if (!nextClass) return { classId: null, section: null };
 
-  return nextClass ? nextClass._id : null;
+  return { classId: nextClass._id, section: extractSection(nextClass.name) };
 };
 
 /**
@@ -76,17 +99,22 @@ export const promoteStudent = async (studentId, resultData) => {
 
   let nextGrade = null;
   let targetStream = null;
+  let preserveSection = false;
 
   if (student.currentGrade === 9) {
     nextGrade = 10;
+    preserveSection = true; // 9C → 10C
   } else if (student.currentGrade === 10) {
     if (!selectedStream || !validateStream(selectedStream)) {
       throw new Error("A valid selectedStream is required for 10 → 11 promotion");
     }
     nextGrade = 11;
     targetStream = selectedStream;
+    preserveSection = false; // stream selection resets section assignment
   } else if (student.currentGrade === 11) {
     nextGrade = 12;
+    preserveSection = true; // 11B → 12B (same stream)
+    targetStream = student.stream !== "NONE" ? student.stream : null;
   } else if (student.currentGrade === 12) {
     student.status = "GRADUATED";
     await student.save();
@@ -96,12 +124,13 @@ export const promoteStudent = async (studentId, resultData) => {
   }
 
   student.currentGrade = nextGrade;
-  if (targetStream) {
-    student.stream = targetStream;
-  }
+  if (targetStream) student.stream = targetStream;
 
   student.status = "APPROVED";
-  student.currentClassId = await assignNextClass(student, nextGrade, targetStream);
+
+  const { classId, section } = await assignNextClass(student, nextGrade, targetStream, preserveSection);
+  student.currentClassId = classId;
+  student.section = section;
 
   await student.save();
 
