@@ -25,6 +25,7 @@ import approvalRoutes from "./routes/approval.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
 import enrollmentRoutes from "./routes/enrollment.routes.js";
+import teacherDashboardRoutes from "./routes/teacherDashboard.routes.js";
 
 const app = express();
 
@@ -121,5 +122,8 @@ app.use("/api/attendance", attendanceRoutes);
 
 // Enrollment routes
 app.use("/api/enrollment", enrollmentRoutes);
+
+// Teacher dashboard routes
+app.use("/api/teacher", teacherDashboardRoutes);
 
 export default app;
