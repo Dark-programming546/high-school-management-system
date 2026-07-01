@@ -23,6 +23,7 @@ import rankingRoutes from "./routes/ranking.routes.js";
 import streamRoutes from "./routes/stream.routes.js";
 import approvalRoutes from "./routes/approval.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
 
 const app = express();
 
@@ -113,5 +114,8 @@ app.use("/api/promotion-batch", promotionBatchRoutes);
 
 // Dashboard routes
 app.use("/api/dashboard", dashboardRoutes);
+
+// Attendance routes
+app.use("/api/attendance", attendanceRoutes);
 
 export default app;
