@@ -24,6 +24,7 @@ import streamRoutes from "./routes/stream.routes.js";
 import approvalRoutes from "./routes/approval.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
+import enrollmentRoutes from "./routes/enrollment.routes.js";
 
 const app = express();
 
@@ -117,5 +118,8 @@ app.use("/api/dashboard", dashboardRoutes);
 
 // Attendance routes
 app.use("/api/attendance", attendanceRoutes);
+
+// Enrollment routes
+app.use("/api/enrollment", enrollmentRoutes);
 
 export default app;

@@ -5,6 +5,7 @@ import Class from "../models/Class.js";
 import AcademicYear from "../models/AcademicYear.js";
 import { generateUsername } from "../utils/usernameGenerator.js";
 import { generateUniquePassword } from "../utils/passwordGenerator.js";
+import { enrollStudentSubjects } from "../services/enrollment.service.js";
 
 const normalizeString = (value) =>
   typeof value === "string" ? value.trim() : value;
@@ -199,9 +200,12 @@ export const updateStudentStatus = async (req, res) => {
 
       await student.save();
 
+      // Auto-enroll in fixed subjects for this grade/stream
+      await enrollStudentSubjects(student, student.academicYearId);
+
       return res.status(200).json({
         success: true,
-        message: "Student approved. Credentials generated and class assigned.",
+        message: "Student approved. Credentials generated, class assigned, and subjects enrolled.",
         student: {
           id: student._id,
           firstName: student.firstName,
