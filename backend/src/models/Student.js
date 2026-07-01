@@ -100,6 +100,11 @@ const studentSchema = new mongoose.Schema(
     },
 
     lastLogin: Date,
+
+    transferNote: {
+      reason: { type: String, default: "" },
+      transferTo: { type: String, default: "" },
+    },
   },
   {
     timestamps: true,
