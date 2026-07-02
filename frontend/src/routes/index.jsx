@@ -32,7 +32,11 @@ import DirectorTeachers        from '../pages/director/Teachers.jsx';
 import DirectorResults         from '../pages/director/Results.jsx';
 import DirectorRanking         from '../pages/director/Ranking.jsx';
 
-import TeacherDashboard from '../pages/teacher/Dashboard.jsx';
+import TeacherDashboard  from '../pages/teacher/Dashboard.jsx';
+import TeacherAssignments from '../pages/teacher/Assignments.jsx';
+import TeacherMarks      from '../pages/teacher/Marks.jsx';
+import TeacherResults    from '../pages/teacher/Results.jsx';
+import TeacherRanking    from '../pages/teacher/Ranking.jsx';
 import StudentDashboard from '../pages/student/Dashboard.jsx';
 
 const Admin        = ({ children }) => <ProtectedRoute requiredRole="admin">{children}</ProtectedRoute>;
@@ -81,7 +85,11 @@ export default function AppRoutes() {
           <Route path="/director/ranking"   element={<Director><DirectorRanking /></Director>}   />
 
           {/* Teacher */}
-          <Route path="/teacher/dashboard" element={<Teacher><TeacherDashboard /></Teacher>} />
+          <Route path="/teacher/dashboard"   element={<Teacher><TeacherDashboard /></Teacher>}   />
+          <Route path="/teacher/assignments" element={<Teacher><TeacherAssignments /></Teacher>} />
+          <Route path="/teacher/marks"       element={<Teacher><TeacherMarks /></Teacher>}       />
+          <Route path="/teacher/results"     element={<Teacher><TeacherResults /></Teacher>}     />
+          <Route path="/teacher/ranking"     element={<Teacher><TeacherRanking /></Teacher>}     />
 
           {/* Student */}
           <Route path="/student/dashboard" element={<Student><StudentDashboard /></Student>} />
